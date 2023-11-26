@@ -77,7 +77,8 @@ function Home(props) {
                             <div className="col-sm-5 pl-sm-0 fix_addwish">
                               <Link
                                 className="btn btn-dark btn-sm btn-block h-100 d-flex align-items-center justify-content-center px-0"
-                                to={`/detail/${value._id}`} 
+                                to={`/detail/${value._id}`}
+                                target="_blank"
                               >
                                 <i className="fa fa-shopping-cart"></i>
                                 <span className="ml-2">View Detail</span>
@@ -190,14 +191,7 @@ function Home(props) {
                           />
                         </a>
                         <div className="product-overlay">
-                          <ul className="mb-0 list-inline">
-                            {/* <li className="list-inline-item m-0 p-0"><a className="btn btn-sm btn-outline-dark" href="#"><i className="far fa-heart"></i></a></li> */}
-                            {/* <li className="list-inline-item m-0 p-0">
-                                                            <Link className="btn btn-sm btn-dark" to={`/detail/${value._id}`}>
-                                                                Add to cart
-                                                            </Link>
-                                                        </li> */}
-                          </ul>
+                          <ul className="mb-0 list-inline"></ul>
                         </div>
                       </div>
                       <h6>

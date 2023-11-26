@@ -36,6 +36,9 @@ function Chat(props) {
     setTextMessage(e.target.value);
   };
 
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") handlerSend();
+  };
   // Check if roomId is null then create new Room
   const createRoom = async () => {
     if (localStorage.getItem("roomId"))
@@ -147,31 +150,31 @@ function Chat(props) {
               </div>
               <div className="ps-container ps-theme-default ps-active-y fix_scoll">
                 {message &&
-                  message?.map((value) =>
+                  message?.map((value, index) =>
                     !value.is_admin ? (
                       <div
                         className="media media-chat media-chat-reverse"
-                        key={value.id}
+                        key={index}
                       >
                         <div className="media-body">
                           <p>You: {value.message}</p>
                         </div>
                       </div>
                     ) : (
-                      <div className="media media-chat" key={value.id}>
+                      <div className="media media-chat" key={index}>
                         {" "}
                         <img
                           className="avatar"
                           src="https://img.icons8.com/color/36/000000/administrator-male.png"
                           alt="..."
                         />
-                        <div className="media-body" key={value.id}>
+                        <div className="media-body">
                           <p>Cộng tác viên: {value.message}</p>
                         </div>
                       </div>
                     )
                   )}
-                <div ref={messagesEndRef} />
+                <li ref={messagesEndRef}></li>
               </div>
               <div className="publisher bt-1 border-light">
                 <img
@@ -185,11 +188,7 @@ function Chat(props) {
                   onChange={onChangeText}
                   value={textMessage}
                   style={{ width: "80%" }}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      handlerSend();
-                    }
-                  }}
+                  onKeyPress={handleKeyPress}
                 />
                 <span
                   onClick={handlerSend}

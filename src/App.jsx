@@ -1,6 +1,4 @@
-import { BrowserRouter, Route, Switch } from "react-router-dom";
-import Footer from "./Share/Footer/Footer";
-import Header from "./Share/Header/Header";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./Home/Home";
 import Detail from "./Detail/Detail";
 import Cart from "./Cart/Cart";
@@ -8,9 +6,9 @@ import SignIn from "./Authentication/SignIn";
 import SignUp from "./Authentication/SignUp";
 import Checkout from "./Checkout/Checkout";
 import History from "./History/History";
-import DetailHistory from "./History/Component/DetailHistory";
+import DetailHistory from "./History/DetailHistory";
 import Shop from "./Shop/Shop";
-import Chat from "./Share/Chat/Chat";
+import Layout from "./Share/Layout/Layout";
 import { useDispatch, useSelector } from "react-redux";
 import UserAPI from "./API/UserAPI";
 import { useEffect } from "react";
@@ -33,6 +31,8 @@ function App() {
       try {
         const response = await UserAPI.getAllData();
         // console.log("autologin:----", response);
+        localStorage.setItem("token", response.user.token);
+
         const addUserSection = addSession({
           userId: response.user.userId,
           email: response.user.email,
@@ -57,7 +57,7 @@ function App() {
       }
     };
 
-    if (!userId && localStorage.getItem("token")) {
+    if (!userId) {
       // console.log("token saved:---", localStorage.getItem("token"));
       autoLogin();
     }
@@ -66,24 +66,22 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <Header />
-        <Switch>
-          <Route exact path="/" component={Home} />{" "}
-          <Route exact path="/detail/:id" component={Detail} />{" "}
-          <Route exact path="/cart" component={Cart} />{" "}
-          <Route exact path="/signin" component={SignIn} />{" "}
-          <Route exact path="/signup" component={SignUp} />{" "}
-          <Route exact path="/checkout" component={Checkout} />{" "}
-          <Route exact path="/history" component={History} />{" "}
-          <Route exact path="/history/:id" component={DetailHistory} />{" "}
-          <Route exact path="/shop" component={Shop} />
-          <Route exact path="*" component={ErrorPage} />
-        </Switch>{" "}
+        <Routes>
+          <Route element={<Layout />}>
+            <Route exact path="/" element={<Home />} />
+            <Route exact path="/ecommerce" element={<Home />} />
+            <Route exact path="/detail/:id" element={<Detail />} />
+            <Route exact path="/cart" element={<Cart />} />
+            <Route exact path="/signin" element={<SignIn />} />
+            <Route exact path="/signup" element={<SignUp />} />
+            <Route exact path="/checkout" element={<Checkout />} />
+            <Route exact path="/history" element={<History />} />
+            <Route exact path="/history/:id" element={<DetailHistory />} />
+            <Route exact path="/shop" element={<Shop />} />
+            <Route exact path="*" element={<ErrorPage />} />
+          </Route>
+        </Routes>
       </BrowserRouter>
-
-      <Chat />
-
-      <Footer />
     </div>
   );
 }

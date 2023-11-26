@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import { Link, Redirect } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import UserAPI from "../API/UserAPI";
-import "./Auth.css";
 import queryString from "query-string";
-import MessengerAPI from "../API/MessengerAPI";
 import alertify from "alertifyjs";
+import "./Auth.css";
 
 SignUp.propTypes = {};
 
@@ -15,7 +14,7 @@ function SignUp(props) {
   const [phone, setPhone] = useState("");
 
   const [errorRes, setErrorRes] = useState(null);
-  const [success, setSuccess] = useState(false);
+  const navigate = useNavigate();
 
   const onChangeName = (e) => {
     setFullName(e.target.value);
@@ -45,11 +44,11 @@ function SignUp(props) {
           phone: phone,
         };
         const query = "?" + queryString.stringify(params);
-        const response = await UserAPI.postSignUp(query);
+        await UserAPI.postSignUp(query);
         // console.log(response);
-        setSuccess(true);
-        alertify.set("notifier", "position", "top-middle");
+        alertify.set("notifier", "position", "top-center");
         alertify.success("Bạn Đã Đăng Ký Thành Công!");
+        navigate("/signin");
       } catch (error) {
         // console.log(error.response?.data);
         setErrorRes(error.response?.data);
@@ -57,19 +56,6 @@ function SignUp(props) {
     };
 
     fetchSignUp();
-
-    // Hàm này dùng để tạo các conversation cho user và admin
-    // const fetchConversation = async () => {
-    //   const params = {
-    //     email: email,
-    //     password: password,
-    //   };
-    //   const query = "?" + queryString.stringify(params);
-    //   const response = await MessengerAPI.postConversation(query);
-    //   // console.log(response);
-    // };
-
-    // fetchConversation();
   };
 
   return (
@@ -131,7 +117,6 @@ function SignUp(props) {
           )}
 
           <div className="container-login100-form-btn m-t-20">
-            {success && <Redirect to={"/signin"} />}
             <button className="login100-form-btn" onClick={handlerSignUp}>
               Sign Up
             </button>

@@ -6,8 +6,13 @@ const UserAPI = {
     return axiosClient.get(url);
   },
 
+  getLogout: () => {
+    const url = "/users/logout";
+    return axiosClient.get(url);
+  },
+
   getDetailData: (id) => {
-    const url = `/users/${id}`;
+    const url = `/users/detail/${id}`;
     return axiosClient.get(url);
   },
 

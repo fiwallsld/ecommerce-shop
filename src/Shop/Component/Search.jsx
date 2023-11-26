@@ -19,8 +19,6 @@ function Search(props) {
 
     setKeySearch(value);
 
-    console.log(keySearch);
-
     if (handlerSearch) {
       //Nếu người dùng đang nhập thì mình clear cái giây đó
       if (delaySearchTextTimeOut.current) {

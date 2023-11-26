@@ -1,20 +1,19 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Link, Redirect } from "react-router-dom";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 import UserAPI from "../API/UserAPI";
 import { addSession } from "../Redux/Action/ActionSession";
 import { addUser } from "../Redux/Action/ActionCart";
 import "./Auth.css";
 import queryString from "query-string";
-import CartAPI from "../API/CartAPI";
 import alertify from "alertifyjs";
 
 function SignIn(props) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [redirect, setRedirect] = useState(false);
   const [errorRes, setErrorRes] = useState(null);
 
   const onChangeEmail = (e) => {
@@ -57,7 +56,8 @@ function SignIn(props) {
 
         alertify.set("notifier", "position", "top-center");
         alertify.success(response.message);
-        setRedirect(true);
+
+        navigate("/");
       } catch (error) {
         // console.log(error.response?.data);
         setErrorRes(error.response?.data);
@@ -100,7 +100,6 @@ function SignIn(props) {
           )}
 
           <div className="container-login100-form-btn m-t-20">
-            {redirect && <Redirect to={`/`} />}
             <button className="login100-form-btn" onClick={onSubmit}>
               Sign in
             </button>

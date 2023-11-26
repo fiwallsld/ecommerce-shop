@@ -293,11 +293,13 @@ function Detail(props) {
                 <div className="col-lg-3 col-sm-6" key={value._id}>
                   <div className="product text-center skel-loader">
                     <div className="d-block mb-3 position-relative">
-                      <img
-                        className="img-fluid w-100"
-                        src={handleImgLink(value.img1)}
-                        alt="..."
-                      />
+                      <Link className="" to={`/detail/${value._id}`}>
+                        <img
+                          className="img-fluid w-100"
+                          src={handleImgLink(value.img1)}
+                          alt="..."
+                        />
+                      </Link>
                       <div className="product-overlay">
                         <ul className="mb-0 list-inline"></ul>
                       </div>

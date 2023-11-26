@@ -3,13 +3,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { deleteCart, updateCart } from "../Redux/Action/ActionCart";
 import ListCart from "./Component/ListCart";
 import alertify from "alertifyjs";
-import { Link, Redirect } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import CartAPI from "../API/CartAPI";
 import queryString from "query-string";
 import convertMoney from "../convertMoney";
 
 function Cart(props) {
-  const [error, setError] = useState(true);
+  const navigate = useNavigate();
 
   //id_user được lấy từ redux
   const userId = useSelector((state) => state.Session.userId);
@@ -68,7 +68,7 @@ function Cart(props) {
         const query = "?" + queryString.stringify(params);
         const response = await CartAPI.getCarts(query);
         // console.log("Lay du lieu nguoi dung", response);
-        const products = response.products.map((item) => {
+        const products = response?.products?.map((item) => {
           return {
             ...item.productId,
             quantity: item.quantity,
@@ -96,7 +96,7 @@ function Cart(props) {
           idProduct: getProduct,
         };
         const query = "?" + queryString.stringify(params);
-        const response = await CartAPI.deleteToCart(query);
+        await CartAPI.deleteToCart(query);
         // console.log(response);
         setLoadAPI(true);
         alertify.set("notifier", "position", "bottom-left");
@@ -141,7 +141,7 @@ function Cart(props) {
 
         const query = "?" + queryString.stringify(params);
 
-        const response = await CartAPI.putToCart(query);
+        await CartAPI.putToCart(query);
         // console.log(response);
         setLoadAPI(true);
         alertify.set("notifier", "position", "bottom-left");
@@ -173,9 +173,6 @@ function Cart(props) {
     }
   };
 
-  //Hàm này dùng để redirect đến page checkout
-  const [redirect, setRedirect] = useState(false);
-
   const onCheckout = (error) => {
     if (!userId) {
       alertify.set("notifier", "position", "bottom-left");
@@ -197,7 +194,7 @@ function Cart(props) {
       return;
     }
 
-    setRedirect(true);
+    navigate("/checkout");
   };
 
   return (
@@ -241,7 +238,6 @@ function Cart(props) {
                   </Link>
                 </div>
                 <div className="col-md-6 text-md-right">
-                  {redirect && <Redirect to={"/checkout"} />}
                   <span
                     className="btn btn-outline-dark btn-sm"
                     onClick={onCheckout}
